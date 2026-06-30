@@ -88,7 +88,7 @@ def execute_sql(sql: str) -> list[dict]:
         db.close()
 
 if __name__ == "__main__":
-    test_query = "现在状态异常的服务有哪些"
+    test_query = "过去7天里哪些服务出现过critical级别的告警,把服务名和告警内容列出来"
     sql = generate_sql(test_query)
     print(f"用户问题: {test_query}")
     print(f"生成的SQL:\n{sql}\n")
