@@ -49,6 +49,7 @@ def search(query: str, top_k: int = 3) -> list[dict]:
     hits = []
     for i in range(len(results["ids"][0])):
         hits.append({
+            "id": results["ids"][0][i],
             "text": results["documents"][0][i],
             "source": results["metadatas"][0][i]["source"],
             "distance": results["distances"][0][i],
