@@ -86,14 +86,37 @@ def execute_sql(sql: str) -> list[dict]:
         return rows
     finally:
         db.close()
+    
+ANSWER_PROMPT = """你是一个运维助手,请根据下面的SQL查询结果,用简洁自然的语言回答用户的问题。
+
+用户问题:{query}
+
+查询结果:{results}
+
+要求:如果查询结果为空,明确告知用户"没有查到相关数据",不要编造内容。
+"""
+
+def nl2sql_answer(query: str) -> dict:
+    """完整流程:生成SQL -> 安全校验 -> 执行 -> 整理成自然语言回答"""
+    sql = generate_sql(query)
+    results = execute_sql(sql)
+
+    prompt = ANSWER_PROMPT.format(query=query, results=results)
+    response = client.chat.completions.create(
+        model=DEFAULT_MODEL,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    answer = response.choices[0].message.content
+
+    return {
+        "answer": answer,
+        "sql": sql,
+        "raw_results": results,
+    }
 
 if __name__ == "__main__":
-    test_query = "过去7天里哪些服务出现过critical级别的告警,把服务名和告警内容列出来"
-    sql = generate_sql(test_query)
+    test_query = "过去7天里哪些服务出现过critical级别的告警"
+    result = nl2sql_answer(test_query)
     print(f"用户问题: {test_query}")
-    print(f"生成的SQL:\n{sql}\n")
-
-    results = execute_sql(sql)
-    print(f"查询结果({len(results)}条):")
-    for row in results:
-        print(row)
+    print(f"\nSQL: {result['sql']}")
+    print(f"\n回答: {result['answer']}")
