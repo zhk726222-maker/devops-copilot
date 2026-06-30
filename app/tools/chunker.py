@@ -1,6 +1,6 @@
 import os
 import tiktoken
-
+import re
 # 用于精确计算token数量的编码器,cl100k_base是GPT系列常用编码,
 # 国产模型没有完全对应的tokenizer时,用它做近似估算也够用
 encoding = tiktoken.get_encoding("cl100k_base")
@@ -10,6 +10,18 @@ CHUNK_OVERLAP = 50     # 相邻chunk之间重叠的token数
 
 def count_tokens(text: str) -> int:
     return len(encoding.encode(text))
+
+
+def clean_long_tokens(text: str, max_word_len: int = 50) -> str:
+    """把超长的连续无空格字符串(如base64编码、长hash)截断,避免破坏分词和模型计算的稳定性"""
+    words = text.split()
+    cleaned = []
+    for w in words:
+        if len(w) > max_word_len:
+            cleaned.append(w[:max_word_len] + "...[截断]")
+        else:
+            cleaned.append(w)
+    return " ".join(cleaned)
 
 def split_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list[str]:
     """把长文本按token数量切块,块与块之间保留overlap个token重叠"""
@@ -35,6 +47,7 @@ def chunk_all_docs(raw_dir: str = "data/raw") -> list[dict]:
         filepath = os.path.join(raw_dir, filename)
         with open(filepath, "r", encoding="utf-8") as f:
             text = f.read()
+        text = clean_long_tokens(text)
         chunks = split_text(text)
         for i, chunk in enumerate(chunks):
             all_chunks.append({

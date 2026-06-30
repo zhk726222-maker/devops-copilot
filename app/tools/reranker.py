@@ -6,7 +6,7 @@ MODEL_NAME = "BAAI/bge-reranker-v2-m3"
 # 模块级缓存,模型只在第一次调用时加载一次,避免每次重排序都重新加载浪费时间
 _tokenizer = None
 _model = None
-_device = "cuda" if torch.cuda.is_available() else "cpu"
+_device = "cpu"  # 评估等批量任务用CPU跑,避免长任务触发GPU不稳定;后续微调部署阶段单独处理
 
 def _load_model():
     global _tokenizer, _model
