@@ -9,7 +9,6 @@ venv/
 *.bin
 *.safetensors
 *.gguf
-data/raw/
 checkpoints/
 
 # IDE与系统文件
