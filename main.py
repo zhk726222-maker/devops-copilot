@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from app.agents.rag_agent import rag_answer
+from app.agents.planner import planner_answer
 
 app = FastAPI(title="DevOps Copilot")
 
@@ -13,5 +13,5 @@ def health_check():
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-    result = rag_answer(request.query)
+    result = planner_answer(request.query)
     return result
