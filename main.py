@@ -1,16 +1,9 @@
-import os
-from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
-from zhipuai import ZhipuAI
-
-load_dotenv()
-api_key = os.getenv("ZHIPU_API_KEY")
-client = ZhipuAI(api_key=api_key)
+from app.core.config import client, DEFAULT_MODEL
 
 app = FastAPI(title="DevOps Copilot")
 
-# 定义请求体的格式:用户必须传一个叫 query 的字符串字段
 class ChatRequest(BaseModel):
     query: str
 
@@ -21,7 +14,7 @@ def health_check():
 @app.post("/chat")
 def chat(request: ChatRequest):
     response = client.chat.completions.create(
-        model="glm-4.6",
+        model=DEFAULT_MODEL,
         messages=[
             {"role": "user", "content": request.query}
         ]
