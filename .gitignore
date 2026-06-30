@@ -18,3 +18,5 @@ checkpoints/
 
 # 日志
 *.log
+
+data/chroma_db/
