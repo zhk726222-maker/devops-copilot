@@ -28,7 +28,7 @@ def rerank(query: str, candidates: list[dict], top_k: int = 3) -> list[dict]:
 
     pairs = [[query, c["text"]] for c in candidates]
     with torch.no_grad():
-        inputs = _tokenizer(pairs, padding=True, truncation=True, max_length=512, return_tensors="pt").to(_device)
+        inputs = _tokenizer(pairs, padding=True, truncation=True, max_length=512, return_tensors="pt", return_token_type_ids=False).to(_device)
         scores = _model(**inputs).logits.view(-1).float()
 
     scored = list(zip(candidates, scores.tolist()))
