@@ -1,9 +1,17 @@
+import os
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+import posthog
+posthog.capture = lambda *args, **kwargs: None
 import chromadb
+from chromadb.config import Settings
 from app.core.config import client, EMBEDDING_MODEL
 from app.tools.chunker import chunk_all_docs
 
 # Chroma的持久化客户端:数据会存在本地文件夹里,重启程序也不会丢
-chroma_client = chromadb.PersistentClient(path="data/chroma_db")
+chroma_client = chromadb.PersistentClient(
+    path="data/chroma_db",
+    settings=Settings(anonymized_telemetry=False),
+)
 
 # 创建(或获取已存在的)一个集合(collection),
 # 集合可以理解成向量数据库里的"一张表",我们的知识库chunk都存这里
