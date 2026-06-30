@@ -1,12 +1,31 @@
+# ===== 后端服务 =====
 fastapi==0.115.0
 uvicorn==0.32.0
+pydantic==2.13.4
 python-dotenv==1.0.1
+
+# ===== 大模型API =====
 zhipuai
+
+# ===== Agent编排 =====
 langgraph==0.2.39
 langchain-core==0.3.10
+
+# ===== 网络请求与文档处理 =====
 httpx==0.27.2
-chromadb==0.5.20
+requests==2.32.3
 beautifulsoup4==4.12.3
 tiktoken==0.8.0
+
+# ===== RAG检索 =====
+chromadb==0.5.20
 rank-bm25==0.2.2
+numpy==1.26.4
+
+# ===== 本地模型推理(Rerank) =====
 transformers==4.46.0
+# torch 需要单独安装GPU版本,不要直接用这个文件装(见下方说明)
+# torch==2.6.0
+
+# ===== 数据库(NL2SQL) =====
+sqlalchemy==2.0.36
