@@ -1,0 +1,20 @@
+# 环境与缓存
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+
+# 模型与数据文件(体积大,不进Git)
+*.bin
+*.safetensors
+*.gguf
+data/raw/
+checkpoints/
+
+# IDE与系统文件
+.vscode/
+.DS_Store
+
+# 日志
+*.log
