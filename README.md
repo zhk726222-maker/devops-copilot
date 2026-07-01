@@ -4,14 +4,13 @@
 
 ## 系统架构
 
-用户提问
-│
-▼
-Planner (本地QLoRA微调模型,~50ms路由延迟)
-│
-├─→ RAG Agent      知识类问题 → 混合检索+Rerank → GLM-4.6生成
-├─→ NL2SQL Agent   数据类问题 → SQL生成+安全校验+执行 → GLM-4.6整理
-└─→ Tool Agent     操作类问题 → Function Calling → 工具执行 → GLM-4.6回复
+用户提问统一进入 **Planner**(本地QLoRA微调路由模型,~50ms延迟),自动判断意图后分发给三个子Agent:
+
+| 子Agent | 适用场景 | 核心技术 |
+|---------|---------|---------|
+| RAG Agent | 知识类问题(概念/原理/用法) | 混合检索+BGE Rerank+GLM-4.6生成 |
+| NL2SQL Agent | 数据类问题(查告警/部署/值班) | SQL生成+安全校验+SQLite执行 |
+| Tool Agent | 操作类问题(重启/查日志/扩缩容) | Function Calling+工具执行 |
 
 ## 核心能力
 
