@@ -19,3 +19,4 @@ checkpoints/
 *.log
 
 data/chroma_db/
+data/models/
