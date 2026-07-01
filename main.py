@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from app.agents.planner import planner_answer
+from app.api.mcp_server import router as mcp_router
 
 app = FastAPI(title="DevOps Copilot")
+app.include_router(mcp_router)
 
 class ChatRequest(BaseModel):
     query: str
